@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 
 /// Pantalla principal (Dashboard)
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _authService = AuthService();
+  String _userName = 'Usuario';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    final user = _authService.currentUser;
+    if (user != null) {
+      setState(() {
+        _userName = user.nombre;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Usuario Demo',
+                            _userName,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: Colors.white.withOpacity(0.9),
                             ),

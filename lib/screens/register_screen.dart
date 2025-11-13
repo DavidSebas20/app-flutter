@@ -54,14 +54,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
           });
 
           if (user != null) {
-            // Registro exitoso - navegar al MainScreen
+            // Registro exitoso - navegar al Login
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Cuenta creada exitosamente'),
+                content: Text(
+                  'Cuenta creada exitosamente. Por favor inicia sesión.',
+                ),
                 backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
               ),
             );
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pop(context);
           } else {
             // Email ya registrado
             ScaffoldMessenger.of(context).showSnackBar(

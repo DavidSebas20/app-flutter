@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'utils/theme.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
@@ -11,6 +14,12 @@ import 'services/permissions_service.dart';
 void main() async {
   // Asegurar inicialización de Flutter
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializar SQLite FFI para desktop
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
 
   // Verificar permisos básicos
   final permissionsService = PermissionsService();

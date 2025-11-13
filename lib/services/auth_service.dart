@@ -60,9 +60,8 @@ class AuthService {
     String telefono = '',
   }) async {
     try {
+      final emailLower = email.toLowerCase().trim();
       final prefs = await SharedPreferences.getInstance();
-
-      // Obtener base de datos de usuarios
       final usersDbJson = prefs.getString(_keyUsersDatabase);
       Map<String, dynamic> usersDb = {};
 
@@ -75,8 +74,7 @@ class AuthService {
       }
 
       // Verificar si el email ya existe
-      final emailKey = email.toLowerCase();
-      if (usersDb.containsKey(emailKey)) {
+      if (usersDb.containsKey(emailLower)) {
         return null; // Email ya registrado
       }
 
@@ -84,20 +82,17 @@ class AuthService {
       final newUser = User(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         nombre: nombre,
-        email: email,
+        email: emailLower,
         telefono: telefono,
       );
 
-      // Guardar usuario en la base de datos local
-      usersDb[emailKey] = {
-        'user': newUser.toJson(),
-        'password': password, // En producción esto debería estar hasheado
-      };
+      // Guardar usuario
+      usersDb[emailLower] = {'user': newUser.toJson(), 'password': password};
 
       await prefs.setString(_keyUsersDatabase, jsonEncode(usersDb));
 
       // Auto-login después del registro
-      return await login(email: email, password: password);
+      return await login(email: emailLower, password: password);
     } catch (e) {
       return null;
     }
@@ -107,17 +102,18 @@ class AuthService {
   Future<User?> login({required String email, required String password}) async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      final emailLower = email.toLowerCase().trim();
+      final passwordTrimmed = password.trim();
 
-      // Usuario demo para pruebas (siempre disponible)
-      if (email.toLowerCase() == 'demo@empresa.com' && password == '123456') {
+      // Usuario demo para pruebas
+      if (emailLower == 'demo@empresa.com' && passwordTrimmed == '123456') {
         final user = User(
           id: 'demo-001',
           nombre: 'Usuario Demo',
-          email: email,
+          email: 'demo@empresa.com',
           telefono: '+52 55 1234 5678',
         );
 
-        // Guardar sesión
         _currentUser = user;
         await prefs.setBool(_keyIsLoggedIn, true);
         await prefs.setString(_keyCurrentUser, user.toJsonString());
@@ -125,23 +121,21 @@ class AuthService {
         return user;
       }
 
-      // Verificar en base de datos local
+      // Verificar en SharedPreferences
       final usersDbJson = prefs.getString(_keyUsersDatabase);
       if (usersDbJson != null && usersDbJson.isNotEmpty) {
         try {
           final usersDb = jsonDecode(usersDbJson) as Map<String, dynamic>;
-          final emailKey = email.toLowerCase();
 
-          if (usersDb.containsKey(emailKey)) {
-            final userData = usersDb[emailKey] as Map<String, dynamic>;
-            final storedPassword = userData['password'] as String;
+          if (usersDb.containsKey(emailLower)) {
+            final userDataPrefs = usersDb[emailLower] as Map<String, dynamic>;
+            final storedPassword = userDataPrefs['password'] as String;
 
-            if (storedPassword == password) {
+            if (storedPassword == passwordTrimmed) {
               final user = User.fromJson(
-                userData['user'] as Map<String, dynamic>,
+                userDataPrefs['user'] as Map<String, dynamic>,
               );
 
-              // Guardar sesión
               _currentUser = user;
               await prefs.setBool(_keyIsLoggedIn, true);
               await prefs.setString(_keyCurrentUser, user.toJsonString());
@@ -150,7 +144,7 @@ class AuthService {
             }
           }
         } catch (e) {
-          // Error al parsear base de datos
+          // Error al parsear
         }
       }
 
@@ -214,7 +208,7 @@ class AuthService {
               await prefs.setString(_keyUsersDatabase, jsonEncode(usersDb));
             }
           } catch (e) {
-            // Error al actualizar base de datos
+            // Error al actualizar
           }
         }
       }
