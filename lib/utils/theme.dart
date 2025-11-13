@@ -4,33 +4,37 @@ import 'package:flutter/material.dart';
 /// Paleta de colores azul y gris para empresa de distribución de productos de oficina
 class AppTheme {
   // Colores corporativos
-  static const Color primaryBlue = Color(0xFF1565C0); // Azul corporativo principal
+  static const Color primaryBlue = Color(
+    0xFF1565C0,
+  ); // Azul corporativo principal
   static const Color secondaryBlue = Color(0xFF42A5F5); // Azul claro secundario
   static const Color darkBlue = Color(0xFF0D47A1); // Azul oscuro
-  static const Color lightBlue = Color(0xFFE3F2FD); // Azul muy claro para fondos
-  
+  static const Color lightBlue = Color(
+    0xFFE3F2FD,
+  ); // Azul muy claro para fondos
+
   static const Color primaryGrey = Color(0xFF607D8B); // Gris corporativo
   static const Color darkGrey = Color(0xFF455A64); // Gris oscuro
   static const Color lightGrey = Color(0xFFECEFF1); // Gris claro para fondos
   static const Color mediumGrey = Color(0xFF90A4AE); // Gris medio
-  
+
   // Colores de acción
   static const Color successGreen = Color(0xFF4CAF50);
   static const Color warningOrange = Color(0xFFFF9800);
   static const Color errorRed = Color(0xFFE53935);
   static const Color infoBlue = Color(0xFF2196F3);
-  
+
   /// Tema claro de la aplicación
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    
+
     // Colores principales
     primaryColor: primaryBlue,
     primaryColorDark: darkBlue,
     primaryColorLight: secondaryBlue,
     scaffoldBackgroundColor: Colors.grey[50],
-    
+
     // Esquema de colores
     colorScheme: ColorScheme.light(
       primary: primaryBlue,
@@ -43,7 +47,7 @@ class AppTheme {
       onSurface: darkGrey,
       onError: Colors.white,
     ),
-    
+
     // AppBar
     appBarTheme: AppBarTheme(
       backgroundColor: primaryBlue,
@@ -58,7 +62,7 @@ class AppTheme {
       ),
       iconTheme: const IconThemeData(color: Colors.white),
     ),
-    
+
     // Barra de navegación inferior
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
@@ -77,16 +81,16 @@ class AppTheme {
       type: BottomNavigationBarType.fixed,
       elevation: 8,
     ),
-    
+
     // Drawer
     drawerTheme: const DrawerThemeData(
       backgroundColor: Colors.white,
       elevation: 16,
     ),
-    
+
     // Cards
     cardColor: Colors.white,
-    
+
     // Botones elevados
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -94,9 +98,7 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 2,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -104,7 +106,7 @@ class AppTheme {
         ),
       ),
     ),
-    
+
     // Botones de texto
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -117,16 +119,14 @@ class AppTheme {
         ),
       ),
     ),
-    
+
     // Botones con borde
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: primaryBlue,
         side: const BorderSide(color: primaryBlue, width: 1.5),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         textStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -134,7 +134,7 @@ class AppTheme {
         ),
       ),
     ),
-    
+
     // Campos de texto
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
@@ -165,23 +165,18 @@ class AppTheme {
       suffixIconColor: primaryGrey,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     ),
-    
+
     // Iconos
-    iconTheme: IconThemeData(
-      color: primaryGrey,
-      size: 24,
-    ),
-    
+    iconTheme: IconThemeData(color: primaryGrey, size: 24),
+
     // Floating Action Button
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryBlue,
       foregroundColor: Colors.white,
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
-    
+
     // Chips
     chipTheme: ChipThemeData(
       backgroundColor: lightBlue,
@@ -189,18 +184,16 @@ class AppTheme {
       labelStyle: const TextStyle(color: darkGrey),
       secondaryLabelStyle: const TextStyle(color: Colors.white),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
-    
+
     // Divisores
     dividerTheme: DividerThemeData(
       color: mediumGrey.withOpacity(0.3),
       thickness: 1,
       space: 1,
     ),
-    
+
     // Texto
     textTheme: TextTheme(
       displayLarge: TextStyle(
@@ -281,14 +274,12 @@ class AppTheme {
         color: mediumGrey,
       ),
     ),
-    
+
     // SnackBar
     snackBarTheme: SnackBarThemeData(
       backgroundColor: darkGrey,
       contentTextStyle: const TextStyle(color: Colors.white),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       behavior: SnackBarBehavior.floating,
     ),
   );

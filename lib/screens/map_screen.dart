@@ -40,10 +40,7 @@ class MapScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        'Próximamente',
-                        style: theme.textTheme.bodySmall,
-                      ),
+                      Text('Próximamente', style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ),
@@ -59,7 +56,10 @@ class MapScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text('Ubicaciones', style: theme.textTheme.titleLarge),
+                    child: Text(
+                      'Ubicaciones',
+                      style: theme.textTheme.titleLarge,
+                    ),
                   ),
                   Expanded(
                     child: ListView(
@@ -68,7 +68,10 @@ class MapScreen extends StatelessWidget {
                         ListTile(
                           leading: CircleAvatar(
                             backgroundColor: theme.colorScheme.primary,
-                            child: const Icon(Icons.business, color: Colors.white),
+                            child: const Icon(
+                              Icons.business,
+                              color: Colors.white,
+                            ),
                           ),
                           title: const Text('Oficina Principal'),
                           subtitle: const Text('Av. Reforma 123, CDMX'),

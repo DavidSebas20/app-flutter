@@ -63,9 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crear Cuenta'),
-      ),
+      appBar: AppBar(title: const Text('Crear Cuenta')),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -200,7 +198,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),

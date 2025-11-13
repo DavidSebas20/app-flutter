@@ -15,7 +15,10 @@ class SalesScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Registrar Nueva Venta', style: theme.textTheme.headlineSmall),
+              Text(
+                'Registrar Nueva Venta',
+                style: theme.textTheme.headlineSmall,
+              ),
               const SizedBox(height: 24),
 
               // Formulario de venta
@@ -30,9 +33,18 @@ class SalesScreen extends StatelessWidget {
                           prefixIcon: Icon(Icons.inventory_2),
                         ),
                         items: const [
-                          DropdownMenuItem(value: '1', child: Text('Papel Bond Tamaño Carta')),
-                          DropdownMenuItem(value: '2', child: Text('Bolígrafos Azules Caja 12')),
-                          DropdownMenuItem(value: '3', child: Text('Carpetas Tamaño Carta')),
+                          DropdownMenuItem(
+                            value: '1',
+                            child: Text('Papel Bond Tamaño Carta'),
+                          ),
+                          DropdownMenuItem(
+                            value: '2',
+                            child: Text('Bolígrafos Azules Caja 12'),
+                          ),
+                          DropdownMenuItem(
+                            value: '3',
+                            child: Text('Carpetas Tamaño Carta'),
+                          ),
                         ],
                         onChanged: (value) {},
                       ),
@@ -58,7 +70,10 @@ class SalesScreen extends StatelessWidget {
                         child: ElevatedButton.icon(
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Venta registrada exitosamente'), backgroundColor: Colors.green),
+                              const SnackBar(
+                                content: Text('Venta registrada exitosamente'),
+                                backgroundColor: Colors.green,
+                              ),
                             );
                           },
                           icon: const Icon(Icons.check),
@@ -83,14 +98,23 @@ class SalesScreen extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 8),
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                          child: Icon(Icons.shopping_cart, color: theme.colorScheme.primary),
+                          backgroundColor: theme.colorScheme.primary
+                              .withOpacity(0.1),
+                          child: Icon(
+                            Icons.shopping_cart,
+                            color: theme.colorScheme.primary,
+                          ),
                         ),
                         title: Text('Venta #${1000 + index}'),
-                        subtitle: Text('Hace ${index + 1} hora${index > 0 ? 's' : ''}'),
+                        subtitle: Text(
+                          'Hace ${index + 1} hora${index > 0 ? 's' : ''}',
+                        ),
                         trailing: Text(
                           '\$${(500 + index * 150).toStringAsFixed(2)}',
-                          style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     );

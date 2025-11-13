@@ -25,7 +25,10 @@ class ReportsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Filtrar por Fecha', style: theme.textTheme.titleMedium),
+                      Text(
+                        'Filtrar por Fecha',
+                        style: theme.textTheme.titleMedium,
+                      ),
                       const SizedBox(height: 16),
                       Row(
                         children: [
@@ -56,7 +59,9 @@ class ReportsScreen extends StatelessWidget {
                         child: ElevatedButton.icon(
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Generando reporte...')),
+                              const SnackBar(
+                                content: Text('Generando reporte...'),
+                              ),
                             );
                           },
                           icon: const Icon(Icons.filter_list),
@@ -131,17 +136,20 @@ class ReportsScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.bar_chart, size: 64, color: theme.colorScheme.primary.withOpacity(0.5)),
+                      Icon(
+                        Icons.bar_chart,
+                        size: 64,
+                        color: theme.colorScheme.primary.withOpacity(0.5),
+                      ),
                       const SizedBox(height: 16),
                       Text(
                         'Gráfico de Ventas',
-                        style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.secondary),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.secondary,
+                        ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        'Próximamente',
-                        style: theme.textTheme.bodySmall,
-                      ),
+                      Text('Próximamente', style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ),

@@ -25,7 +25,12 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Text('Usuario Demo', style: theme.textTheme.headlineSmall),
               const SizedBox(height: 8),
-              Text('usuario@empresa.com', style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.secondary)),
+              Text(
+                'usuario@empresa.com',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.secondary,
+                ),
+              ),
               const SizedBox(height: 32),
 
               // Opciones de perfil
@@ -33,43 +38,53 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.person_outline, color: theme.colorScheme.primary),
+                      leading: Icon(
+                        Icons.person_outline,
+                        color: theme.colorScheme.primary,
+                      ),
                       title: const Text('Editar Perfil'),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Función en desarrollo')),
+                          const SnackBar(
+                            content: Text('Función en desarrollo'),
+                          ),
                         );
                       },
                     ),
                     Divider(height: 1, color: theme.dividerColor),
                     ListTile(
-                      leading: Icon(Icons.lock_outline, color: theme.colorScheme.primary),
+                      leading: Icon(
+                        Icons.lock_outline,
+                        color: theme.colorScheme.primary,
+                      ),
                       title: const Text('Cambiar Contraseña'),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Función en desarrollo')),
+                          const SnackBar(
+                            content: Text('Función en desarrollo'),
+                          ),
                         );
                       },
                     ),
                     Divider(height: 1, color: theme.dividerColor),
                     ListTile(
-                      leading: Icon(Icons.notifications, color: theme.colorScheme.primary),
-                      title: const Text('Notificaciones'),
-                      trailing: Switch(
-                        value: true,
-                        onChanged: (value) {},
+                      leading: Icon(
+                        Icons.notifications,
+                        color: theme.colorScheme.primary,
                       ),
+                      title: const Text('Notificaciones'),
+                      trailing: Switch(value: true, onChanged: (value) {}),
                     ),
                     Divider(height: 1, color: theme.dividerColor),
                     ListTile(
-                      leading: Icon(Icons.dark_mode_outlined, color: theme.colorScheme.primary),
-                      title: const Text('Modo Oscuro'),
-                      trailing: Switch(
-                        value: false,
-                        onChanged: (value) {},
+                      leading: Icon(
+                        Icons.dark_mode_outlined,
+                        color: theme.colorScheme.primary,
                       ),
+                      title: const Text('Modo Oscuro'),
+                      trailing: Switch(value: false, onChanged: (value) {}),
                     ),
                   ],
                 ),
@@ -81,7 +96,10 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Icon(Icons.info_outline, color: theme.colorScheme.primary),
+                      leading: Icon(
+                        Icons.info_outline,
+                        color: theme.colorScheme.primary,
+                      ),
                       title: const Text('Acerca de'),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
@@ -89,21 +107,32 @@ class ProfileScreen extends StatelessWidget {
                           context: context,
                           applicationName: 'Distribuidora Oficina',
                           applicationVersion: '1.0.0',
-                          applicationIcon: Icon(Icons.inventory_2, size: 48, color: theme.colorScheme.primary),
+                          applicationIcon: Icon(
+                            Icons.inventory_2,
+                            size: 48,
+                            color: theme.colorScheme.primary,
+                          ),
                           children: [
-                            const Text('Sistema de Gestión de Ventas para distribución de productos de oficina.'),
+                            const Text(
+                              'Sistema de Gestión de Ventas para distribución de productos de oficina.',
+                            ),
                           ],
                         );
                       },
                     ),
                     Divider(height: 1, color: theme.dividerColor),
                     ListTile(
-                      leading: Icon(Icons.help_outline, color: theme.colorScheme.primary),
+                      leading: Icon(
+                        Icons.help_outline,
+                        color: theme.colorScheme.primary,
+                      ),
                       title: const Text('Ayuda'),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Función en desarrollo')),
+                          const SnackBar(
+                            content: Text('Función en desarrollo'),
+                          ),
                         );
                       },
                     ),
@@ -122,14 +151,18 @@ class ProfileScreen extends StatelessWidget {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Cerrar Sesión'),
-                        content: const Text('¿Estás seguro que deseas cerrar sesión?'),
+                        content: const Text(
+                          '¿Estás seguro que deseas cerrar sesión?',
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
                             child: const Text('Cancelar'),
                           ),
                           ElevatedButton(
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
                             onPressed: () {
                               Navigator.pop(context);
                               Navigator.pushReplacementNamed(context, '/login');

@@ -74,9 +74,15 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.cloud_outlined, color: theme.colorScheme.primary),
+                          Icon(
+                            Icons.cloud_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
                           const SizedBox(width: 8),
-                          Text('Información del Día', style: theme.textTheme.titleMedium),
+                          Text(
+                            'Información del Día',
+                            style: theme.textTheme.titleMedium,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -88,7 +94,10 @@ class HomeScreen extends StatelessWidget {
                                 Icon(Icons.wb_sunny, size: 28),
                                 SizedBox(height: 8),
                                 Text('Clima'),
-                                Text('24°C Soleado', style: TextStyle(fontWeight: FontWeight.w600)),
+                                Text(
+                                  '24°C Soleado',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             ),
                           ),
@@ -99,7 +108,10 @@ class HomeScreen extends StatelessWidget {
                                 Icon(Icons.attach_money, size: 28),
                                 SizedBox(height: 8),
                                 Text('Dólar'),
-                                Text('\$17.50 MXN', style: TextStyle(fontWeight: FontWeight.w600)),
+                                Text(
+                                  '\$17.50 MXN',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             ),
                           ),
@@ -116,11 +128,32 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const Row(
                 children: [
-                  Expanded(child: _StatCard(icon: Icons.shopping_cart, label: 'Ventas Hoy', value: '15', color: Colors.green)),
+                  Expanded(
+                    child: _StatCard(
+                      icon: Icons.shopping_cart,
+                      label: 'Ventas Hoy',
+                      value: '15',
+                      color: Colors.green,
+                    ),
+                  ),
                   SizedBox(width: 12),
-                  Expanded(child: _StatCard(icon: Icons.inventory_2, label: 'Productos', value: '248', color: Colors.blue)),
+                  Expanded(
+                    child: _StatCard(
+                      icon: Icons.inventory_2,
+                      label: 'Productos',
+                      value: '248',
+                      color: Colors.blue,
+                    ),
+                  ),
                   SizedBox(width: 12),
-                  Expanded(child: _StatCard(icon: Icons.warning_amber, label: 'Stock Bajo', value: '3', color: Colors.orange)),
+                  Expanded(
+                    child: _StatCard(
+                      icon: Icons.warning_amber,
+                      label: 'Stock Bajo',
+                      value: '3',
+                      color: Colors.orange,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -158,9 +191,19 @@ class _StatCard extends StatelessWidget {
         children: [
           Icon(icon, color: color, size: 32),
           const SizedBox(height: 8),
-          Text(value, style: theme.textTheme.headlineMedium?.copyWith(color: color, fontWeight: FontWeight.bold)),
+          Text(
+            value,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(label, style: theme.textTheme.bodySmall, textAlign: TextAlign.center),
+          Text(
+            label,
+            style: theme.textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

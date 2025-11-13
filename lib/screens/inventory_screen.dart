@@ -32,7 +32,10 @@ class InventoryScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -40,9 +43,19 @@ class InventoryScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.inventory_2, size: 16, color: theme.colorScheme.primary),
+                        Icon(
+                          Icons.inventory_2,
+                          size: 16,
+                          color: theme.colorScheme.primary,
+                        ),
                         const SizedBox(width: 6),
-                        Text('Total: 5', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w600)),
+                        Text(
+                          'Total: 5',
+                          style: TextStyle(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -50,7 +63,10 @@ class InventoryScreen extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.orange.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -58,9 +74,19 @@ class InventoryScreen extends StatelessWidget {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.warning_amber, size: 16, color: Colors.orange),
+                        Icon(
+                          Icons.warning_amber,
+                          size: 16,
+                          color: Colors.orange,
+                        ),
                         SizedBox(width: 6),
-                        Text('Stock Bajo: 2', style: TextStyle(color: Colors.orange, fontWeight: FontWeight.w600)),
+                        Text(
+                          'Stock Bajo: 2',
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -77,11 +103,36 @@ class InventoryScreen extends StatelessWidget {
               itemCount: 5,
               itemBuilder: (context, index) {
                 final products = [
-                  {'nombre': 'Papel Bond Tamaño Carta', 'categoria': 'Papelería', 'precio': 89.99, 'stock': 150},
-                  {'nombre': 'Bolígrafos Azules Caja 12', 'categoria': 'Escritura', 'precio': 45.50, 'stock': 4},
-                  {'nombre': 'Carpetas Tamaño Carta', 'categoria': 'Archivo', 'precio': 25.00, 'stock': 80},
-                  {'nombre': 'Marcadores Permanentes', 'categoria': 'Escritura', 'precio': 35.00, 'stock': 3},
-                  {'nombre': 'Grapadora Metálica', 'categoria': 'Herramientas', 'precio': 125.00, 'stock': 25},
+                  {
+                    'nombre': 'Papel Bond Tamaño Carta',
+                    'categoria': 'Papelería',
+                    'precio': 89.99,
+                    'stock': 150,
+                  },
+                  {
+                    'nombre': 'Bolígrafos Azules Caja 12',
+                    'categoria': 'Escritura',
+                    'precio': 45.50,
+                    'stock': 4,
+                  },
+                  {
+                    'nombre': 'Carpetas Tamaño Carta',
+                    'categoria': 'Archivo',
+                    'precio': 25.00,
+                    'stock': 80,
+                  },
+                  {
+                    'nombre': 'Marcadores Permanentes',
+                    'categoria': 'Escritura',
+                    'precio': 35.00,
+                    'stock': 3,
+                  },
+                  {
+                    'nombre': 'Grapadora Metálica',
+                    'categoria': 'Herramientas',
+                    'precio': 125.00,
+                    'stock': 25,
+                  },
                 ];
                 final product = products[index];
                 final isLowStock = (product['stock'] as num) <= 5;
@@ -98,19 +149,31 @@ class InventoryScreen extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: theme.colorScheme.primary.withOpacity(0.1),
+                                color: theme.colorScheme.primary.withOpacity(
+                                  0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: Icon(Icons.inventory_2, color: theme.colorScheme.primary, size: 28),
+                              child: Icon(
+                                Icons.inventory_2,
+                                color: theme.colorScheme.primary,
+                                size: 28,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(product['nombre'] as String, style: theme.textTheme.titleMedium),
+                                  Text(
+                                    product['nombre'] as String,
+                                    style: theme.textTheme.titleMedium,
+                                  ),
                                   const SizedBox(height: 4),
-                                  Text(product['categoria'] as String, style: theme.textTheme.bodySmall),
+                                  Text(
+                                    product['categoria'] as String,
+                                    style: theme.textTheme.bodySmall,
+                                  ),
                                 ],
                               ),
                             ),
@@ -120,26 +183,56 @@ class InventoryScreen extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.green.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: Text('\$${product['precio']}', style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600)),
+                              child: Text(
+                                '\$${product['precio']}',
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
-                                color: isLowStock ? Colors.orange.withOpacity(0.1) : Colors.blue.withOpacity(0.1),
+                                color: isLowStock
+                                    ? Colors.orange.withOpacity(0.1)
+                                    : Colors.blue.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(isLowStock ? Icons.warning_amber : Icons.check_circle, size: 16, color: isLowStock ? Colors.orange : Colors.blue),
+                                  Icon(
+                                    isLowStock
+                                        ? Icons.warning_amber
+                                        : Icons.check_circle,
+                                    size: 16,
+                                    color: isLowStock
+                                        ? Colors.orange
+                                        : Colors.blue,
+                                  ),
                                   const SizedBox(width: 4),
-                                  Text('Stock: ${product['stock']}', style: TextStyle(color: isLowStock ? Colors.orange : Colors.blue, fontWeight: FontWeight.w600)),
+                                  Text(
+                                    'Stock: ${product['stock']}',
+                                    style: TextStyle(
+                                      color: isLowStock
+                                          ? Colors.orange
+                                          : Colors.blue,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

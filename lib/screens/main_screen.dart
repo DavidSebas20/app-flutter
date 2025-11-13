@@ -67,10 +67,7 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(
             icon: Icon(Icons.inventory_2),
             label: 'Inventario',
@@ -83,14 +80,8 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.assessment),
             label: 'Reportes',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Mapa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),
     );
