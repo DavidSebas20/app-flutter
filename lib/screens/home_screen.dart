@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../services/auth_service.dart';
+import '../services/database_helper.dart';
 
 /// Pantalla principal (Dashboard)
 class HomeScreen extends StatefulWidget {
@@ -11,12 +13,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _authService = AuthService();
+  final _dbHelper = DatabaseHelper.instance;
   String _userName = 'Usuario';
+  bool _isLoading = true;
+
+  // Estadísticas
+  int _ventasHoy = 0;
+  double _ingresosHoy = 0.0;
+  int _totalProductos = 0;
+  int _productosStockBajo = 0;
 
   @override
   void initState() {
     super.initState();
     _loadUserName();
+    _loadStats();
   }
 
   Future<void> _loadUserName() async {
@@ -28,159 +39,227 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _loadStats() async {
+    setState(() => _isLoading = true);
+
+    try {
+      // Obtener todas las ventas
+      final allVentas = await _dbHelper.getAllVentas();
+
+      // Filtrar ventas de hoy
+      final today = DateTime.now();
+      final ventasHoy = allVentas.where((venta) {
+        return venta.fecha.year == today.year &&
+            venta.fecha.month == today.month &&
+            venta.fecha.day == today.day;
+      }).toList();
+
+      // Calcular ingresos de hoy
+      final ingresosHoy = ventasHoy.fold<double>(
+        0.0,
+        (sum, venta) => sum + venta.total,
+      );
+
+      // Obtener todos los productos
+      final productos = await _dbHelper.getAllProductos();
+
+      // Obtener productos con stock bajo (menos de 10)
+      final productosStockBajo = await _dbHelper.getProductosLowStock(10);
+
+      setState(() {
+        _ventasHoy = ventasHoy.length;
+        _ingresosHoy = ingresosHoy;
+        _totalProductos = productos.length;
+        _productosStockBajo = productosStockBajo.length;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al cargar estadísticas: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currencyFormat = NumberFormat.currency(
+      symbol: '\$',
+      decimalDigits: 2,
+    );
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Encabezado de bienvenida
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      theme.colorScheme.primary,
-                      theme.colorScheme.primary.withOpacity(0.7),
-                    ],
+      body: RefreshIndicator(
+        onRefresh: _loadStats,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Encabezado de bienvenida
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        theme.colorScheme.primary,
+                        theme.colorScheme.primary.withOpacity(0.7),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: 35,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '¡Bienvenido!',
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _userName,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: Colors.white.withOpacity(0.9),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Tarjeta de información
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.cloud_outlined,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Información del Día',
-                            style: theme.textTheme.titleMedium,
-                          ),
-                        ],
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 35,
+                          color: theme.colorScheme.primary,
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      const Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Icon(Icons.wb_sunny, size: 28),
-                                SizedBox(height: 8),
-                                Text('Clima'),
-                                Text(
-                                  '24°C Soleado',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '¡Bienvenido!',
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          VerticalDivider(),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Icon(Icons.attach_money, size: 28),
-                                SizedBox(height: 8),
-                                Text('Dólar'),
-                                Text(
-                                  '\$17.50 MXN',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                            const SizedBox(height: 4),
+                            Text(
+                              _userName,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: Colors.white.withOpacity(0.9),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-              // Estadísticas
-              Text('Resumen de Hoy', style: theme.textTheme.headlineSmall),
-              const SizedBox(height: 16),
-              const Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.shopping_cart,
-                      label: 'Ventas Hoy',
-                      value: '15',
-                      color: Colors.green,
+                // Tarjeta de ingresos de hoy
+                Card(
+                  elevation: 4,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.green.shade400, Colors.green.shade600],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.trending_up,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Ingresos de Hoy',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        if (_isLoading)
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        else
+                          Text(
+                            currencyFormat.format(_ingresosHoy),
+                            style: theme.textTheme.headlineLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '$_ventasHoy ${_ventasHoy == 1 ? "venta realizada" : "ventas realizadas"}',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.inventory_2,
-                      label: 'Productos',
-                      value: '248',
-                      color: Colors.blue,
+                ),
+                const SizedBox(height: 24),
+
+                // Estadísticas
+                Text('Resumen General', style: theme.textTheme.headlineSmall),
+                const SizedBox(height: 16),
+
+                if (_isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: CircularProgressIndicator(),
                     ),
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _StatCard(
+                          icon: Icons.shopping_cart,
+                          label: 'Ventas Hoy',
+                          value: '$_ventasHoy',
+                          color: Colors.green,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _StatCard(
+                          icon: Icons.inventory_2,
+                          label: 'Productos',
+                          value: '$_totalProductos',
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _StatCard(
+                          icon: Icons.warning_amber,
+                          label: 'Stock Bajo',
+                          value: '$_productosStockBajo',
+                          color: _productosStockBajo > 0
+                              ? Colors.orange
+                              : Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      icon: Icons.warning_amber,
-                      label: 'Stock Bajo',
-                      value: '3',
-                      color: Colors.orange,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
