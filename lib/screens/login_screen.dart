@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 
 /// Pantalla de inicio de sesión
 /// Permite al usuario autenticarse en la aplicación
@@ -13,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _authService = AuthService();
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -30,16 +32,43 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = true;
       });
 
-      // Simular proceso de autenticación
-      await Future.delayed(const Duration(seconds: 2));
+      try {
+        // Intentar login con el servicio de autenticación
+        final user = await _authService.login(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
 
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
 
-        // Navegar al MainScreen (dashboard)
-        Navigator.pushReplacementNamed(context, '/main');
+          if (user != null) {
+            // Login exitoso - navegar al MainScreen
+            Navigator.pushReplacementNamed(context, '/main');
+          } else {
+            // Credenciales incorrectas
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Correo o contraseña incorrectos'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error al iniciar sesión. Intenta de nuevo.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }

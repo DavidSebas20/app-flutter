@@ -1,12 +1,58 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+import '../models/user.dart';
+import 'edit_profile_screen.dart';
 
 /// Pantalla de perfil de usuario
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _authService = AuthService();
+  User? _currentUser;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  /// Carga los datos del usuario actual
+  Future<void> _loadUserData() async {
+    final user = await _authService.getCurrentUser();
+    if (mounted) {
+      setState(() {
+        _currentUser = user;
+        _isLoading = false;
+      });
+    }
+  }
+
+  /// Navega a la edición de perfil
+  Future<void> _navigateToEditProfile() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EditProfileScreen()),
+    );
+
+    // Si se guardaron cambios, recargar datos
+    if (result == true) {
+      _loadUserData();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -23,14 +69,37 @@ class ProfileScreen extends StatelessWidget {
                 child: const Icon(Icons.person, size: 60, color: Colors.white),
               ),
               const SizedBox(height: 16),
-              Text('Usuario Demo', style: theme.textTheme.headlineSmall),
+              Text(
+                _currentUser?.nombre ?? 'Usuario',
+                style: theme.textTheme.headlineSmall,
+              ),
               const SizedBox(height: 8),
               Text(
-                'usuario@empresa.com',
+                _currentUser?.email ?? 'email@empresa.com',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.secondary,
                 ),
               ),
+              if (_currentUser?.telefono.isNotEmpty == true) ...[
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      size: 16,
+                      color: theme.colorScheme.secondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _currentUser!.telefono,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               const SizedBox(height: 32),
 
               // Opciones de perfil
@@ -44,13 +113,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       title: const Text('Editar Perfil'),
                       trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Función en desarrollo'),
-                          ),
-                        );
-                      },
+                      onTap: _navigateToEditProfile,
                     ),
                     Divider(height: 1, color: theme.dividerColor),
                     ListTile(
@@ -112,8 +175,8 @@ class ProfileScreen extends StatelessWidget {
                             size: 48,
                             color: theme.colorScheme.primary,
                           ),
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               'Sistema de Gestión de Ventas para distribución de productos de oficina.',
                             ),
                           ],
@@ -163,9 +226,16 @@ class ProfileScreen extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
                             ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pushReplacementNamed(context, '/login');
+                            onPressed: () async {
+                              // Cerrar sesión
+                              await _authService.logout();
+                              if (context.mounted) {
+                                Navigator.pop(context); // Cerrar diálogo
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  '/login',
+                                );
+                              }
                             },
                             child: const Text('Cerrar Sesión'),
                           ),

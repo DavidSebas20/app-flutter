@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 
 /// Pantalla de registro de nuevos usuarios
 /// Permite crear una nueva cuenta en el sistema
@@ -15,6 +16,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _authService = AuthService();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
@@ -25,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -35,24 +39,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _isLoading = true;
       });
 
-      // Simular proceso de registro
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-
-        // Mostrar mensaje de éxito
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Cuenta creada exitosamente'),
-            backgroundColor: Colors.green,
-          ),
+      try {
+        // Intentar registrar usuario
+        final user = await _authService.register(
+          nombre: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          telefono: _phoneController.text.trim(),
         );
 
-        // Regresar a login
-        Navigator.pop(context);
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          if (user != null) {
+            // Registro exitoso - navegar al MainScreen
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cuenta creada exitosamente'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.pushReplacementNamed(context, '/main');
+          } else {
+            // Email ya registrado
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Este correo ya está registrado'),
+                backgroundColor: Colors.orange,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error al crear cuenta. Intenta de nuevo.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }
@@ -146,6 +177,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Campo de teléfono
+                    TextFormField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(
+                        labelText: 'Teléfono (opcional)',
+                        hintText: '+52 55 1234 5678',
+                        prefixIcon: Icon(Icons.phone_outlined),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
