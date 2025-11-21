@@ -15,6 +15,11 @@ dependencies:
   sqflite: ^2.3.0
   sqflite_common_ffi: ^2.3.0
   path: ^1.8.3
+  http: ^1.1.0
+  flutter_local_notifications: ^17.0.0
+  webview_flutter: ^4.4.2
+  geolocator: ^10.1.0
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

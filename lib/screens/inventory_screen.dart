@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/database_helper.dart';
+import '../services/stream_service.dart';
 import '../widgets/product_form_dialog.dart';
 
 /// Pantalla de gestión de inventario
@@ -13,6 +14,7 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
+  final StreamService _streamService = StreamService.instance;
   List<Product> _products = [];
   List<Product> _filteredProducts = [];
   bool _isLoading = true;
@@ -22,7 +24,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   void initState() {
     super.initState();
+    _streamService.initialize();
     _loadProducts();
+    // Escuchar cambios en los productos
+    _streamService.productosStream.listen((productos) {
+      if (mounted) {
+        setState(() {
+          _products = productos;
+          _filterProducts();
+        });
+      }
+    });
   }
 
   @override
@@ -140,8 +152,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
 
     if (confirm == true) {
-      await _dbHelper.deleteProducto(product.id!);
-      _loadProducts();
+      await _streamService.deleteProducto(product.id!);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Producto eliminado exitosamente')),

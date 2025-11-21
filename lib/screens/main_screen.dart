@@ -3,7 +3,7 @@ import 'home_screen.dart';
 import 'inventory_screen.dart';
 import 'sales_screen.dart';
 import 'reports_screen.dart';
-import 'map_screen.dart';
+import 'maps_screen.dart';
 import 'profile_screen.dart';
 import 'notifications_screen.dart';
 import '../services/database_helper.dart';
@@ -47,7 +47,7 @@ class _MainScreenState extends State<MainScreen> {
     InventoryScreen(),
     SalesScreen(),
     ReportsScreen(),
-    MapScreen(),
+    MapsScreen(),
     ProfileScreen(),
   ];
 

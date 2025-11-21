@@ -8,6 +8,8 @@ import 'screens/register_screen.dart';
 import 'screens/main_screen.dart';
 import 'services/auth_service.dart';
 import 'services/permissions_service.dart';
+import 'services/notification_service.dart';
+import 'services/stream_service.dart';
 
 /// Punto de entrada de la aplicación
 /// Distribuidora de Productos de Oficina - Sistema de Gestión de Ventas
@@ -20,6 +22,10 @@ void main() async {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
+
+  // Inicializar servicios
+  await NotificationService.instance.initialize();
+  await StreamService.instance.initialize();
 
   // Verificar permisos básicos
   final permissionsService = PermissionsService();
@@ -36,7 +42,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // Configuración general
-      title: 'Distribuidora Oficina',
+      title: 'Distribuidora Quito',
       debugShowCheckedModeBanner: false,
 
       // Tema de la aplicación
@@ -124,7 +130,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
             // Nombre de la app
             const Text(
-              'Distribuidora Oficina',
+              'Distribuidora Quito',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 28,
@@ -136,7 +142,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
             // Subtítulo
             const Text(
-              'Sistema de Gestión de Ventas',
+              'Productos de Oficina - Ecuador',
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 16,

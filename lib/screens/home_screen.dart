@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/auth_service.dart';
 import '../services/database_helper.dart';
+import '../services/currency_service.dart';
+import '../services/stream_service.dart';
 
 /// Pantalla principal (Dashboard)
 class HomeScreen extends StatefulWidget {
@@ -14,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _authService = AuthService();
   final _dbHelper = DatabaseHelper.instance;
+  final _currencyService = CurrencyService.instance;
+  final _streamService = StreamService.instance;
   String _userName = 'Usuario';
   bool _isLoading = true;
 
@@ -23,11 +27,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int _totalProductos = 0;
   int _productosStockBajo = 0;
 
+  // Cotización del dólar
+  double? _exchangeRate;
+  bool _loadingRate = false;
+  String? _rateError;
+
   @override
   void initState() {
     super.initState();
     _loadUserName();
     _loadStats();
+    _loadExchangeRate();
+    _streamService.initialize();
   }
 
   Future<void> _loadUserName() async {
@@ -83,12 +94,37 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _loadExchangeRate() async {
+    setState(() => _loadingRate = true);
+    try {
+      final result = await _currencyService.getExchangeRate();
+      if (result['success']) {
+        setState(() {
+          _exchangeRate = result['rate'];
+          _loadingRate = false;
+          _rateError = null;
+        });
+      } else {
+        setState(() {
+          _loadingRate = false;
+          _rateError = result['error'];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _loadingRate = false;
+        _rateError = 'Error: $e';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final currencyFormat = NumberFormat.currency(
       symbol: '\$',
       decimalDigits: 2,
+      name: 'USD',
     );
 
     return Scaffold(
@@ -258,6 +294,83 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                const SizedBox(height: 16),
+
+                // Tarjeta de cotización del dólar
+                Card(
+                  elevation: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.purple.shade300,
+                          Colors.purple.shade500,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.attach_money,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Cotización EUR → USD',
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              if (_loadingRate)
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation(
+                                      Colors.white,
+                                    ),
+                                  ),
+                                )
+                              else if (_rateError != null)
+                                Text(
+                                  'No disponible',
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                  ),
+                                )
+                              else if (_exchangeRate != null)
+                                Text(
+                                  '€1 = \$${_exchangeRate!.toStringAsFixed(4)} USD',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh, color: Colors.white),
+                          onPressed: _loadExchangeRate,
+                          tooltip: 'Actualizar',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
