@@ -121,9 +121,7 @@ class _MapsScreenState extends State<MapsScreen> {
               children: [
                 WebViewWidget(controller: _controller),
                 if (_isLoading)
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),

@@ -12,6 +12,7 @@ Se ha cambiado de **Google Maps** a **OpenStreetMap** por las siguientes razones
 ## Características Actuales
 
 ### 📍 Marcadores Implementados
+
 - **Empresa Principal** (azul): Oficina en Centro Histórico de Quito
 - **Clientes** (rojo): 4 ubicaciones principales en Quito:
   - Quicentro (Norte)
@@ -21,6 +22,7 @@ Se ha cambiado de **Google Maps** a **OpenStreetMap** por las siguientes razones
 - **Tu ubicación** (verde): Cuando se otorgan permisos de ubicación
 
 ### 🎯 Funcionalidades
+
 - Zoom interactivo
 - Navegación por arrastre
 - Lista de ubicaciones para navegación rápida
@@ -30,13 +32,15 @@ Se ha cambiado de **Google Maps** a **OpenStreetMap** por las siguientes razones
 ## Tecnología Utilizada
 
 ### Paquetes
+
 ```yaml
-flutter_map: ^6.1.0      # Widget de mapas
-latlong2: ^0.9.0         # Coordenadas geográficas
-geolocator: ^10.1.0      # Ubicación del dispositivo
+flutter_map: ^6.1.0 # Widget de mapas
+latlong2: ^0.9.0 # Coordenadas geográficas
+geolocator: ^10.1.0 # Ubicación del dispositivo
 ```
 
 ### Proveedor de Tiles
+
 - **OpenStreetMap**: `https://tile.openstreetmap.org/{z}/{x}/{y}.png`
 - Sin autenticación requerida
 - Límite de uso justo (no hay hard limits)
@@ -44,6 +48,7 @@ geolocator: ^10.1.0      # Ubicación del dispositivo
 ## Notas Importantes
 
 ⚠️ **Política de Uso Justo de OpenStreetMap**
+
 - No hacer más de 1 petición de tile por segundo
 - Incluir un User-Agent identificable
 - Para apps en producción con mucho tráfico, considera:
@@ -51,6 +56,7 @@ geolocator: ^10.1.0      # Ubicación del dispositivo
   - Usar servicios como Mapbox o Maptiler (tienen tier gratuito)
 
 ✨ **Sin costos ocultos**
+
 - No se requiere configuración de billing en Google Cloud
 - No hay riesgo de cargos inesperados
 - Perfecto para desarrollo y demos
@@ -73,6 +79,7 @@ Si OpenStreetMap presenta problemas, puedes usar:
 ## Personalización Futura
 
 Para mejorar aún más:
+
 - Agregar nombres a los marcadores con popups
 - Implementar rutas entre puntos
 - Agregar búsqueda de direcciones (geocoding gratuito)
